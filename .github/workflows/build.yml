@@ -1,0 +1,26 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository (with submodules)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure CMake
+        run: |
+          mkdir build64_all
+          cd build64_all
+          cmake .. -G "Visual Studio 18 2026" -A x64 -DDEVELOPER_MODE=ON
+
+      - name: Build
+        run: |
+          cd build64_all
+          cmake --build . --config Release --target RE9
